@@ -1,0 +1,16 @@
+@import "tailwindcss";
+
+
+::-webkit-scrollbar{
+    background-color: #0f0f0f;
+    width: 4px;
+}
+
+::-webkit-scrollbar-thumb{
+    background-color: #ff003c;
+    border-radius: 12px;
+    
+}
+body {
+    overflow-x: hidden; /* Prevent horizontal scroll */
+  }
