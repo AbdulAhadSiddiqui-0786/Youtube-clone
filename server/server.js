@@ -14,7 +14,7 @@ import viewsRoutes from './routes/views.js';
 
 import { errorHandler, notFound } from './middleware/errorHandler.js';
 import Video from './models/Video.js';
-import pingRoute from './routes/ping.js';
+import pingRoute from './routes/pingRoute.js';
 
 
 app.use('/api', pingRoute);
