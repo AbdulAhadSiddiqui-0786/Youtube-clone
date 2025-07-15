@@ -1,21 +1,23 @@
-import { Link } from 'react-router-dom';
-import { useAuth } from '../../context/AuthContext';
+import { Link } from "react-router-dom";
+import { useAuth } from "../../context/AuthContext";
 
-export default function SmallVideoCard({ video }) {
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
+
+export default function VerticalVideoCard({ video }) {
   const { user } = useAuth();
   const isCurrentUserChannel = video.channel?.user === user?._id;
 
-  // Thumbnail handling
-  const isAbsoluteUrl = video?.thumbnailUrl?.startsWith('http');
+  // Handle thumbnail: use full Render URL if not absolute
+  const isAbsoluteUrl = video?.thumbnailUrl?.startsWith("http");
   const thumbnailUrl = isAbsoluteUrl
     ? video.thumbnailUrl
-    : `http://localhost:5000${video.thumbnailUrl}`;
+    : `${API_BASE_URL}${video.thumbnailUrl}`;
 
   return (
     <div className="flex gap-2 hover:bg-[#ffffff0d] p-2 rounded-xl transition-colors">
       {/* Thumbnail */}
-      <Link 
-        to={`/watch/${video._id}`} 
+      <Link
+        to={`/watch/${video._id}`}
         className="flex-shrink-0 w-40 h-24 relative"
       >
         <img
@@ -23,7 +25,7 @@ export default function SmallVideoCard({ video }) {
           alt={video.title}
           className="w-full h-full object-cover rounded-xl"
           onError={(e) => {
-            e.target.src = '/placeholder-thumbnail.jpg';
+            e.target.src = "/placeholder-thumbnail.jpg";
           }}
         />
       </Link>
@@ -31,20 +33,25 @@ export default function SmallVideoCard({ video }) {
       {/* Video Info */}
       <div className="flex flex-col gap-1 flex-1 min-w-0">
         <h3 className="text-white font-medium text-sm line-clamp-2">
-          {video.title || 'Untitled Video'}
+          {video.title || "Untitled Video"}
         </h3>
-        
+
         <Link
-          to={isCurrentUserChannel ? `/channel/${video.channel?.user}` : `/channel/${video.channel?._id}`}
+          to={
+            isCurrentUserChannel
+              ? `/channel/${video.channel?.user}`
+              : `/channel/${video.channel?._id}`
+          }
           className="text-xs text-[#aaa] hover:text-white line-clamp-1"
         >
-          {video.channel?.channelName || 'Unknown Channel'}
+          {video.channel?.channelName || "Unknown Channel"}
         </Link>
-        
+
         <div className="text-xs text-[#aaa] flex items-center gap-1">
-          <span>{video.views?.toLocaleString() || '0'} views</span>
+          <span>{video.views?.toLocaleString() || "0"} views</span>
           <span>•</span>
-          <span>2 days ago</span> {/* Replace with actual timestamp */}
+          <span>2 days ago</span>{" "}
+          {/* Replace with dynamic timestamp if needed */}
         </div>
       </div>
     </div>

@@ -1,11 +1,13 @@
-import { useEffect, useState } from 'react';
-import { useParams, Link } from 'react-router-dom';
-import ReactPlayer from 'react-player';
-import { BiLike, BiDislike, BiSolidLike, BiSolidDislike } from 'react-icons/bi';
-import { FaShare } from 'react-icons/fa';
-import axios from 'axios';
-import CommentSection from '../../components/CommentSection/CommentSection';
-import RecommendationVideo from '../../components/RecommendationVideo/RecommendationVideo';
+import { useEffect, useState } from "react";
+import { useParams, Link } from "react-router-dom";
+import ReactPlayer from "react-player";
+import { BiLike, BiDislike, BiSolidLike, BiSolidDislike } from "react-icons/bi";
+import { FaShare } from "react-icons/fa";
+import axios from "axios";
+import CommentSection from "../../components/CommentSection/CommentSection";
+import RecommendationVideo from "../../components/RecommendationVideo/RecommendationVideo";
+
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
 export default function VideoPlayerPage() {
   const { videoId } = useParams();
@@ -19,10 +21,10 @@ export default function VideoPlayerPage() {
   useEffect(() => {
     const fetchVideo = async () => {
       try {
-        const response = await axios.get(`http://localhost:5000/api/videos/${videoId}`);
+        const response = await axios.get(`${API_BASE_URL}/videos/${videoId}`);
         setVideo(response.data.video);
       } catch (error) {
-        console.error('Error fetching video:', error);
+        console.error("Error fetching video:", error);
       }
     };
     fetchVideo();
@@ -31,54 +33,60 @@ export default function VideoPlayerPage() {
   useEffect(() => {
     const fetchLikes = async () => {
       try {
-        const response = await axios.get(`http://localhost:5000/api/videos/${videoId}/likes`);
+        const response = await axios.get(
+          `${API_BASE_URL}/videos/${videoId}/likes`
+        );
         setLikes(response.data.likes);
         setDislikes(response.data.dislikes);
       } catch (error) {
-        console.error('Error fetching likes:', error);
+        console.error("Error fetching likes:", error);
       }
     };
     fetchLikes();
   }, [videoId]);
 
-  // Increment View Count
   useEffect(() => {
     const incrementViews = async () => {
       try {
-        await axios.post(`http://localhost:5000/api/videos/${videoId}/views`);
+        await axios.post(`${API_BASE_URL}/videos/${videoId}/views`);
       } catch (error) {
-        console.error('Error incrementing views:', error);
+        console.error("Error incrementing views:", error);
       }
     };
-
     incrementViews();
   }, [videoId]);
 
   const handleLike = async () => {
     try {
-      const response = await axios.post(`http://localhost:5000/api/videos/${videoId}/like`, {}, {
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem('token')}`, // Send token if required
-        },
-      });
+      const response = await axios.post(
+        `${API_BASE_URL}/videos/${videoId}/like`,
+        {},
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+        }
+      );
       setLikes(response.data.likes);
       setDislikes(response.data.dislikes);
       setIsLike(true);
       setIsDisLike(false);
     } catch (error) {
-      console.error('Error liking video:', error);
+      console.error("Error liking video:", error);
     }
   };
 
   const handleDislike = async () => {
     try {
-      const response = await axios.post(`http://localhost:5000/api/videos/${videoId}/dislike`);
+      const response = await axios.post(
+        `${API_BASE_URL}/videos/${videoId}/dislike`
+      );
       setLikes(response.data.likes);
       setDislikes(response.data.dislikes);
       setIsDisLike(true);
       setIsLike(false);
     } catch (error) {
-      console.error('Error disliking video:', error);
+      console.error("Error disliking video:", error);
     }
   };
 
@@ -97,40 +105,38 @@ export default function VideoPlayerPage() {
   }
 
   return (
-    <div className="min-h-screen flex flex-col lg:flex-row gap-6 bg-[#0f0f0f] text-white py-20 md:py-20 px-4 lg:px-8">
-      {/* Main Content Section */}
+    <div className="min-h-screen flex flex-col lg:flex-row gap-6 bg-[#0f0f0f] text-white py-20 px-4 lg:px-8">
+      {/* Main Section */}
       <div className="w-full lg:w-2/3 space-y-6">
-        {/* Video Player */}
         <div className="aspect-video bg-black rounded-xl overflow-hidden">
-          <ReactPlayer 
-            url={`http://localhost:5000${video.videoUrl}`} 
-            controls 
-            width="100%" 
+          <ReactPlayer
+            url={`${API_BASE_URL}${video.videoUrl}`}
+            controls
+            width="100%"
             height="100%"
           />
         </div>
 
-        {/* Video Details */}
         <div className="space-y-4">
           <h1 className="text-xl md:text-2xl font-bold">{video.title}</h1>
-          
-          {/* Channel Info and Actions */}
+
           <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
             <div className="flex items-center gap-3">
-              <img 
-                src={video.channel?.channelLogo || 'https://dummyimage.com/64x64'} 
-                className="w-10 h-10 rounded-full" 
-                alt="Channel" 
+              <img
+                src={video.channel?.channelLogo || "/user.png"}
+                className="w-10 h-10 rounded-full"
+                alt="Channel"
               />
               <div>
-                <Link 
-                  to={`/channel/${video.channel?._id}`} 
+                <Link
+                  to={`/channel/${video.channel?._id}`}
                   className="font-bold hover:text-white/80"
                 >
-                  {video.channel?.channelName || 'Unknown Channel'}
+                  {video.channel?.channelName || "Unknown Channel"}
                 </Link>
                 <p className="text-sm text-gray-400">
-                  {video.channel?.subscribers?.toLocaleString() || '0'} subscribers
+                  {video.channel?.subscribers?.toLocaleString() || 0}{" "}
+                  subscribers
                 </p>
               </div>
               <button className="ml-4 bg-white hover:bg-gray-700 text-black px-4 py-2 rounded-full">
@@ -138,10 +144,9 @@ export default function VideoPlayerPage() {
               </button>
             </div>
 
-            {/* Like/Dislike/Share Buttons */}
             <div className="flex items-center gap-3">
               <div className="flex bg-white/10 rounded-full p-1">
-                <button 
+                <button
                   onClick={handleLike}
                   className="flex items-center gap-2 px-4 py-2 rounded-l-full hover:bg-white/20"
                 >
@@ -149,14 +154,18 @@ export default function VideoPlayerPage() {
                   {likes.toLocaleString()}
                 </button>
                 <div className="w-px h-6 bg-white/20" />
-                <button 
+                <button
                   onClick={handleDislike}
                   className="px-4 py-2 rounded-r-full hover:bg-white/20"
                 >
-                  {isDisLike ? <BiSolidDislike size={20} /> : <BiDislike size={20} />}
+                  {isDisLike ? (
+                    <BiSolidDislike size={20} />
+                  ) : (
+                    <BiDislike size={20} />
+                  )}
                 </button>
               </div>
-              <button 
+              <button
                 onClick={handleShare}
                 className="flex items-center gap-2 bg-white/10 hover:bg-white/20 px-4 py-2 rounded-full"
               >
@@ -165,26 +174,25 @@ export default function VideoPlayerPage() {
             </div>
           </div>
 
-          {/* Video Description */}
           <div className="bg-white/5 rounded-xl p-4 relative">
-            <p className={`text-gray-300 ${expandDesc ? '' : 'line-clamp-2'}`}>
-              {video.views.toLocaleString()} views<br />
+            <p className={`text-gray-300 ${expandDesc ? "" : "line-clamp-2"}`}>
+              {video.views.toLocaleString()} views
+              <br />
               {video.description}
             </p>
-            <button 
+            <button
               onClick={() => setExpandDesc(!expandDesc)}
               className="text-blue-400 hover:text-blue-300 font-medium mt-2"
             >
-              {expandDesc ? 'Show less' : 'Show more'}
+              {expandDesc ? "Show less" : "Show more"}
             </button>
           </div>
         </div>
 
-        {/* Comments Section */}
         <CommentSection videoId={videoId} />
       </div>
 
-      {/* Recommendations Sidebar */}
+      {/* Recommendations */}
       <div className="w-full lg:w-1/3 lg:overflow-y-auto lg:sticky lg:top-20">
         <RecommendationVideo currentVideoId={videoId} />
       </div>

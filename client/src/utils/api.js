@@ -1,35 +1,39 @@
 import axios from 'axios';
 
-// Create axios instance
+// Create axios instance with fallback baseURL
 const api = axios.create({
-  baseURL: import.meta.env.VITE_API_BASE_URL,
+  baseURL: import.meta.env.VITE_API_BASE_URL || 'http://localhost:5000/api',
 });
 
-// Request interceptor
+// Request interceptor – add Bearer token
 api.interceptors.request.use((config) => {
-  const token = localStorage.getItem('token');
-  if (token) {
-    config.headers.Authorization = `Bearer ${token}`;
+  if (typeof window !== 'undefined') {
+    const token = localStorage.getItem('token');
+    if (token) {
+      config.headers.Authorization = `Bearer ${token}`;
+    }
   }
   return config;
 });
 
-// Response interceptor
+// Response interceptor – handle 401
 api.interceptors.response.use(
   (response) => response,
   (error) => {
     if (error.response?.status === 401) {
-      localStorage.removeItem('token');
-      window.location.href = '/auth';
+      if (typeof window !== 'undefined') {
+        localStorage.removeItem('token');
+        window.location.href = '/auth';
+      }
     }
     return Promise.reject(error);
   }
 );
 
-// Export the axios instance directly
+// Export axios instance
 export default api;
 
-// Create separate object for organized endpoints
+// Organized API endpoints
 export const API_ENDPOINTS = {
   auth: {
     login: (credentials) => api.post('/auth/login', credentials),
@@ -44,11 +48,13 @@ export const API_ENDPOINTS = {
     delete: (id) => api.delete(`/videos/${id}`),
   },
   comments: {
-    create: (videoId, commentData) => api.post(`/videos/${videoId}/comments`, commentData),
-    delete: (videoId, commentId) => api.delete(`/videos/${videoId}/comments/${commentId}`),
+    create: (videoId, commentData) =>
+      api.post(`/videos/${videoId}/comments`, commentData),
+    delete: (videoId, commentId) =>
+      api.delete(`/videos/${videoId}/comments/${commentId}`),
   },
   channels: {
     getById: (id) => api.get(`/channels/${id}`),
     create: (channelData) => api.post('/channels', channelData),
-  }
+  },
 };
