@@ -14,7 +14,8 @@ import viewsRoutes from './routes/views.js';
 
 import { errorHandler, notFound } from './middleware/errorHandler.js';
 import Video from './models/Video.js';
-import pingRoute from './routes/pingRoute.js';
+import pingRoute from './routes/ping.js';
+
 
 
 dotenv.config();
@@ -43,7 +44,7 @@ app.use('/api/videos', videoRoutes);
 app.use('/api/comments', commentRoutes);
 app.use('/api/channels', channelRoutes);
 app.use('/api', searchRoutes);
-app.use('/api', pingRoute);
+app.use('/api', pingRoute );
  // Search route
 
 // ------------------ LIKE / DISLIKE ROUTES ------------------
