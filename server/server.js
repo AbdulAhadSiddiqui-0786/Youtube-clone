@@ -12,8 +12,9 @@ import searchRoutes from './routes/searchVideoByQuery.js';
 import viewsRoutes from './routes/views.js';
 
 import { errorHandler, notFound } from './middleware/errorHandler.js';
-import { protect } from './middleware/authMiddleware.js';
 import Video from './models/Video.js';
+
+
 
 dotenv.config();
 connectDB();
