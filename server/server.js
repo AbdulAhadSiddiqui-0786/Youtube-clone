@@ -17,8 +17,6 @@ import Video from './models/Video.js';
 import pingRoute from './routes/pingRoute.js';
 
 
-app.use('/api', pingRoute);
-
 dotenv.config();
 connectDB();
 
@@ -44,7 +42,9 @@ app.use('/api/videos', viewsRoutes);  // Views and views-related endpoints
 app.use('/api/videos', videoRoutes);
 app.use('/api/comments', commentRoutes);
 app.use('/api/channels', channelRoutes);
-app.use('/api', searchRoutes); // Search route
+app.use('/api', searchRoutes);
+app.use('/api', pingRoute);
+ // Search route
 
 // ------------------ LIKE / DISLIKE ROUTES ------------------
 
