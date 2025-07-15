@@ -60,7 +60,7 @@ export default function Header() {
           <FiMenu className="w-6 h-6 text-white" />
         </button>
         <Link to="/" className="flex items-center space-x-2">
-          <img src="/src/assets/logo.png" className="h-8 w-8" alt="logo" />
+          <img src="/logo.png" className="h-8 w-8" alt="logo" />
           <span className="text-xl font-medium tracking-tighter text-white-600">
             YouTube
           </span>
