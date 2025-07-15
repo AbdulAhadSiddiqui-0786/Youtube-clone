@@ -11,10 +11,13 @@ import channelRoutes from './routes/channelRoutes.js';
 import searchRoutes from './routes/searchVideoByQuery.js';
 import viewsRoutes from './routes/views.js';
 
+
 import { errorHandler, notFound } from './middleware/errorHandler.js';
 import Video from './models/Video.js';
+import pingRoute from './routes/ping.js';
 
 
+app.use('/api', pingRoute);
 
 dotenv.config();
 connectDB();
