@@ -55,7 +55,7 @@ app.get('/api/videos/:videoId/likes', async (req, res) => {
 });
 
 // Like a video
-app.post('/api/videos/:videoId/like', protect, async (req, res) => {
+app.post('/api/videos/:videoId/like', async (req, res) => {
   try {
     const video = await Video.findById(req.params.videoId);
     if (!video) return res.status(404).json({ message: 'Video not found' });
@@ -76,7 +76,7 @@ app.post('/api/videos/:videoId/like', protect, async (req, res) => {
 });
 
 // Dislike a video
-app.post('/api/videos/:videoId/dislike', protect, async (req, res) => {
+app.post('/api/videos/:videoId/dislike',   async (req, res) => {
   try {
     const video = await Video.findById(req.params.videoId);
     if (!video) return res.status(404).json({ message: 'Video not found' });
