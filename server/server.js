@@ -29,7 +29,7 @@ app.use(cors({
     origin: [
     'http://localhost:5173', 
     'https://youtube-clone-4ddyc38pc-abdulahadsiddiqui-0786s-projects.vercel.app',
-    'https://youtube-clone-swart-eta.vercel.app' 
+    'https://ytcloneabd.vercel.app' 
   ],
   credentials: true,
 }));
