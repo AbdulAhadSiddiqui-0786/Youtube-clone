@@ -4,7 +4,7 @@ import { BrowserRouter } from 'react-router-dom'
 import App from './App'
 import { AuthProvider } from './context/AuthContext'
 import { SearchProvider } from './context/SearchContext'
-import './assets/styles/global.css'
+import '../src/global.css'
 
 ReactDOM.createRoot(document.getElementById('root')).render(
 
