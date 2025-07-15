@@ -24,7 +24,10 @@ app.use(express.json());
 
 // CORS: Restrict to frontend origin in production
 app.use(cors({
-  origin: ['http://localhost:5173', 'youtube-clone-swart-eta.vercel.app'],
+    origin: [
+    'http://localhost:5173', 
+    'https://youtube-clone-4ddyc38pc-abdulahadsiddiqui-0786s-projects.vercel.app'
+  ],
   credentials: true,
 }));
 
